@@ -1,0 +1,9 @@
+.nav-bar-color {
+  color: #ffffff !important;
+}
+
+@media (min-width: 576px) {
+  .form-inline .form-control {
+    width: 350px;
+  }
+}
