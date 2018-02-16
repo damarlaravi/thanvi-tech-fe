@@ -7,6 +7,10 @@ import {NavBarComponent} from './nav-bar/nav-bar.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SharedService} from './service/shared.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ServiceInterceptor } from './service/service.interceptor';
+import { AuthService, Ng2UiAuthModule } from 'ng2-ui-auth';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -16,12 +20,22 @@ import {SharedService} from './service/shared.service';
     PageNotFoundComponent
   ],
   imports: [
+    Ng2UiAuthModule.forRoot({
+      baseUrl: environment.API_URL,
+      tokenPrefix : 'thanvi-tech',
+      loginUrl : '/auth/login',
+      signupUrl : '/auth/signup'
+    }),
     BrowserAnimationsModule,
     NgbModule.forRoot(),
     APP_ROUTES,
     BrowserModule.withServerTransition({ appId: 'serverApp' })
   ],
-  providers: [SharedService],
+  providers: [SharedService, {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ServiceInterceptor,
+    multi: true
+  }, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

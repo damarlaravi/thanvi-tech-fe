@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from 'ng2-ui-auth';
 
 @Component({
   selector: 'app-home',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
-  constructor() { }
+  public loggedUser;
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
+    this.loggedUser = this.auth.getPayload();
+    console.log(' this.logged user is :: ', this.loggedUser);
   }
 
 }

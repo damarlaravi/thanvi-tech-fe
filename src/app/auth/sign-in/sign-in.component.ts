@@ -45,8 +45,13 @@ export class SignInComponent implements OnInit {
   login(loginData: { username: string, password: string }) {
     this.auth.login(loginData)
       .subscribe({
+        next: (response) => {
+          this.auth.setToken(response.token);
+          // console.log('token is   ', response.token);
+          this.sharedService.setLogged(true);
+        },
         error: (err: any) => alert(err.message),
         complete: () => this.router.navigateByUrl('')
       });
-  }
+  } 
 }

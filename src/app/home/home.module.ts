@@ -5,7 +5,7 @@ import { StockComponent } from '../stock/stock.component';
 
 @NgModule({
   declarations: [HomeComponent, StockComponent],
-  imports: [HOME_ROUTES]
+  imports: [HOME_ROUTES],
 })
 
 export class HomeModule {
