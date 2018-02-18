@@ -7,7 +7,7 @@ export class SharedService {
   private subject = new Subject<boolean>();
 
   public setLogged(val: boolean): void {
-    console.log('value is :: ', val);
+    //  console.log('value is :: ', val);
     this.subject.next(val);
   }
 

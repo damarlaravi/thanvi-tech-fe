@@ -1,22 +1,22 @@
 import {RouterModule, Routes} from '@angular/router';
-import {SignInComponent} from './sign-in/sign-in.component';
+import {LoginComponent} from './login/login.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
 import {ForgotPasswordComponent} from './forgot-password/forgot-password.component';
 import {ResetPasswordComponent} from './reset-password/reset-password.component';
-import {SignOutComponent} from './sign-out/sign-out.component';
+import {LogoutComponent} from './logout/logout.component';
 
 export const AUTH_ROUTERS: Routes = [
   {
     path: '',
-    component: SignInComponent
+    component: LoginComponent
   },
   {
     path: 'sign-up',
     component: SignUpComponent
   },
   {
-    path: 'auth/sign-out',
-    component: SignOutComponent
+    path: 'auth/logout',
+    component: LogoutComponent
   },
   {
     path: 'auth/forgot-password',

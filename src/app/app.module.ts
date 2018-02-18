@@ -5,12 +5,12 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {APP_ROUTES} from './app.routes';
 import {NavBarComponent} from './nav-bar/nav-bar.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SharedService} from './service/shared.service';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ServiceInterceptor } from './service/service.interceptor';
-import { AuthService, Ng2UiAuthModule } from 'ng2-ui-auth';
-import { environment } from '../environments/environment';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {ServiceInterceptor} from './service/service.interceptor';
+import {AuthService, Ng2UiAuthModule} from 'ng2-ui-auth';
+import {environment} from '../environments/environment';
+import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule} from '@angular/material';
 
 
 @NgModule({
@@ -22,14 +22,14 @@ import { environment } from '../environments/environment';
   imports: [
     Ng2UiAuthModule.forRoot({
       baseUrl: environment.API_URL,
-      tokenPrefix : 'thanvi-tech',
-      loginUrl : '/auth/login',
-      signupUrl : '/auth/signup'
+      tokenPrefix: 'thanvi-tech',
+      loginUrl: '/auth/login',
+      signupUrl: '/auth/signup'
     }),
     BrowserAnimationsModule,
-    NgbModule.forRoot(),
+    MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule,
     APP_ROUTES,
-    BrowserModule.withServerTransition({ appId: 'serverApp' })
+    BrowserModule.withServerTransition({appId: 'serverApp'})
   ],
   providers: [SharedService, {
     provide: HTTP_INTERCEPTORS,
@@ -38,4 +38,5 @@ import { environment } from '../environments/environment';
   }, AuthService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -5,11 +5,15 @@ import {ModuleWithProviders} from '@angular/core';
 export const APP_ROUTERS: Routes = [
   {
     path: '',
+    loadChildren: './auth/auth.module#AuthModule'
+  },
+  {
+    path: 'home',
     loadChildren: './home/home.module#HomeModule'
   },
   {
-    path: 'auth',
-    loadChildren: './auth/auth.module#AuthModule'
+    path: 'stock',
+    loadChildren: './stock/stock.module#StockModule'
   },
   {
     path: '**',

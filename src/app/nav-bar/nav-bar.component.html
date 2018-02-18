@@ -1,43 +1,28 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <a class="navbar-brand nav-bar-color" target="_blank">Thanvi Techno Solutions</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarsExampleDefault"
-          aria-controls="navBarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>{{titleText}}</span>
+    <span class="example-spacer"></span>
+    <div *ngFor="let nav of navList">
+      <button mat-button [routerLink]="[nav.routePath]">
+        {{nav.description}}
+      </button>
+    </div>
+    <i class="material-icons" [matMenuTriggerFor]="menu">&#xE87C;</i>
+    <mat-menu #menu="matMenu">
+      <div *ngFor="let user of userList">
+        <button mat-menu-item [routerLink]="[user.routePath]">{{user.description}}</button>
+      </div>
+    </mat-menu>
 
-  <div class="collapse navbar-collapse" id="navBarsExampleDefault">
-    <ul class="navbar-nav navbar-collapse navbar-collapse-custom">
-      <li class="nav-item active" routerLinkActive="['active']">
-        <a class="nav-link" routerLinkActive="['active']" [routerLink]="['']" >Home
-          <!-- <span class="sr-only">(current)</span>-->
-        </a>
-      </li>
-      <li class="nav-item active" routerLinkActive="['active']">
-        <a class="nav-link" routerLinkActive="['active']"
-           #rla="routerLinkActive" [routerLink]="['/stock']">Stock
-          <!--<span class="sr-only">(current)</span>-->
-        </a>
-      </li>
-    </ul>
+    <!--mat-menu #appMenu="matMenu">
+      <ng-template matMenuContent>
+        <button mat-menu-item>Settings</button>
+        <button mat-menu-item>Help</button>
+      </ng-template>
+    </mat-menu>
 
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-
-    <ul class="navbar-nav pull-right">
-      <li class="nav-item active" routerLinkActive="['active']">
-        <a class="nav-link" routerLinkActive="['active']"
-           #rla="routerLinkActive" [routerLink]="['/auth']">Login
-          <!--<span class="sr-only">(current)</span>-->
-        </a>
-      </li>
-      <li class="nav-item active" *ngIf="isLoggedIn" routerLinkActive="['active']">
-        <a class="nav-link" routerLinkActive="['active']"
-           #rla="routerLinkActive" [routerLink]="['/auth/sign-up']">Sign up
-          <!--<span class="sr-only">(current)</span>-->
-        </a>
-      </li>
-    </ul>
-  </div>
-</nav>
+    <button mat-icon-button [matMenuTriggerFor]="appMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>-->
+  </mat-toolbar-row>
+</mat-toolbar>
