@@ -31,17 +31,20 @@ export class ResetComponent implements OnInit {
 
   public onResetPassword(): void {
     if (this.resetForm.valid) {
-      const password = this.resetForm.get('password').value;
-      this.technoService.setNewPassword(password, this.token).subscribe((res) => {
+      const passObj = {
+        password: this.resetForm.get('password').value,
+        token: this.token
+      }
+      this.technoService.setNewPassword(passObj).subscribe((res) => {
         console.log(' response is :: ', res);
       }, err => console.log(' Error is :: ', err),
-        () => {
+      () => {
         this.route.navigate(['/login']);
-        });
+      });
     }
   }
 
   public onReset(): void {
-
+    this.resetForm.reset();
   }
 }
