@@ -1,6 +1,6 @@
-.sign-box {
+.reset-box {
   border-radius: 10px;
-  width: 350px;
+  width: 450px;
   margin: 20px auto auto;
   padding: 20px 0 20px 0;
   background-color: #f7f7f7;
@@ -9,15 +9,14 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
 }
 
-.sub-head {
+.recovery-text {
+  font-size: 20px;
+  width: 100%;
   text-align: center;
-  padding-bottom: 25px;
   font-weight: bold;
-  font-size: 14px;
-  color: #676767;
 }
 
-.sign-logo {
+.forgot-logo {
   text-align: center;
   width: 100%;
   padding: 20px 0 0 0;
@@ -25,8 +24,12 @@
   color: #337ab7;
 }
 
-.sign-box-bottom {
+.form-lbl {
+  width: 150px;
+}
+.reset-pass-match {
   text-align: center;
   width: 100%;
-  padding: 10px 0 0 10px;
+  padding: 0;
+  font-size: 14px;
 }

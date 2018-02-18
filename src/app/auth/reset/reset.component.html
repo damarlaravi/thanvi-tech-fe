@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row reset-box">
+    <div class="forgot-logo">
+      <label class="recovery-text">Reset Password</label>
+    </div>
+    <form class="form-inline" [formGroup]="resetForm">
+      <label class="form-lbl">Enter password</label>
+      <div class="form-group">
+        <input type="password" class="form-control" formControlName="password"
+               title="password" placeholder="enter password">
+      </div>
+      <label class="form-lbl">Confirm password</label>
+      <div class="form-group">
+        <input type="password" class="form-control" formControlName="confirm"
+               title="confirm password" placeholder="repeat password">
+      </div>
+      <div class="reset-pass-match">
+        <small class="text text-danger"
+               *ngIf="resetForm.get('confirm').errors && resetForm.get('confirm').errors.matchOther">
+          passwords not matched
+        </small>
+      </div>
+      <div class="forgot-logo">
+        <button class="btn btn-primary" (click)="onResetPassword()">Reset</button>
+        <button class="btn btn-danger" (click)="onReset()">Clear</button>
+      </div>
+    </form>
+  </div>
+</div>

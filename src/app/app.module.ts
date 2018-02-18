@@ -11,6 +11,7 @@ import {ServiceInterceptor} from './service/service.interceptor';
 import {AuthService, Ng2UiAuthModule} from 'ng2-ui-auth';
 import {environment} from '../environments/environment';
 import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule} from '@angular/material';
+import {TechnoService} from './service/techno.service';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule} from '@
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true
-  }, AuthService],
+  }, AuthService, TechnoService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
