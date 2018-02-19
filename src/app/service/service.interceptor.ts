@@ -1,6 +1,6 @@
-import { Injectable } from "@angular/core";
-import { HttpResponse, HttpEvent, HttpRequest, HttpHandler, HttpInterceptor } from "@angular/common/http";
-import { Observable } from "rxjs/Observable";
+import { Injectable } from '@angular/core';
+import { HttpResponse, HttpEvent, HttpRequest, HttpHandler, HttpInterceptor } from '@angular/common/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 @Injectable()

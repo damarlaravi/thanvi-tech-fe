@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TechnoService} from '../../service/techno.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-forgot-password',
@@ -25,7 +26,7 @@ export class ForgotComponent implements OnInit {
       this.technoService.forgotPassword(email).subscribe((resp) => {
         console.log(' resp is ', resp);
       },
-      err => console.log(err)
+      (err: HttpErrorResponse) => console.log(err)
       );
     } else {
       console.log('this.forgotForm is valid ', this.forgotForm.valid);

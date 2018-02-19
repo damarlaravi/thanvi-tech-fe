@@ -34,7 +34,7 @@ export class ResetComponent implements OnInit {
       const passObj = {
         password: this.resetForm.get('password').value,
         token: this.token
-      }
+      };
       this.technoService.setNewPassword(passObj).subscribe((res) => {
         console.log(' response is :: ', res);
       }, err => console.log(' Error is :: ', err),
