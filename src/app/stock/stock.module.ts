@@ -11,9 +11,11 @@ import {
   MatNativeDateModule,
   MatTabsModule
 } from '@angular/material';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
+    ReactiveFormsModule,
     STOCK_ROUTES,
     CommonModule,
     MatDatepickerModule,

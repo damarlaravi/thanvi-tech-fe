@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-received',
@@ -6,10 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./received.component.scss']
 })
 export class ReceivedComponent implements OnInit {
-
-  constructor() { }
+  public receivedForm:FormGroup;
+  constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.receivedForm = this.fb.group({
+      date: ['', [Validators.required]],
+      product: ['', [Validators.required]],
+      model: ['', [Validators.required]],
+      unitRate: ['', [Validators.required]],
+      qty: ['', [Validators.required]]
+    })
   }
 
 }
