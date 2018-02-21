@@ -4,9 +4,9 @@
     <form [formGroup]="receivedForm" class="form-horizantal">
       <div class="form-container">
         <mat-form-field>
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
+          <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
+          <mat-datepicker touchUi="true" #picker></mat-datepicker>
         </mat-form-field>
         <mat-form-field>
           <input matInput placeholder="product" formControlName="product">
