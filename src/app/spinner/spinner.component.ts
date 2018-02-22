@@ -17,9 +17,13 @@ export class SpinnerComponent implements OnInit, OnDestroy {
             this.active = status;
         });
     }
-
+    /**
+     *  or do it on some other event eg: when xmlhttp request completes 
+     * loading data for the component
+     * 
+     */ 
     ngOnInit() {
-        this.spinner.stop(); // or do it on some other event eg: when xmlhttp request completes loading data for the component
+        this.spinner.stop(); 
     }
 
     ngOnDestroy() {
