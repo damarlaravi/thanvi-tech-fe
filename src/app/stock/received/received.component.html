@@ -1,26 +1,40 @@
-<div class="col-sm-6">
-  <h1>Stock Received Details</h1>
-  <div class="col-sm-12">
-    <form [formGroup]="receivedForm" class="form-horizantal">
-      <div class="form-container">
-        <mat-form-field>
-          <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker touchUi="true" #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="product" formControlName="product">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="model" formControlName="model">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="unit rate" formControlName="unitRate">
-        </mat-form-field>
-        <mat-form-field>
-          <input matInput placeholder="quantity" formControlName="qty">
-        </mat-form-field>
-      </div>
-    </form>
+<div class="container received-box">
+  <div class="col-sm-6">
+    <h1>Stock Received Details</h1>
+    <div class="col-sm-12">
+      <form [formGroup]="receivedForm" class="form-horizantal">
+        <div class="form-container">
+          <mat-form-field>
+            <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('date').invalid"> enter stock date</small>
+          <mat-form-field>
+            <input matInput placeholder="product" formControlName="product">
+          </mat-form-field>
+          <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('model').invalid"> enter product name</small>
+          <mat-form-field>
+            <input matInput placeholder="model" formControlName="model">
+          </mat-form-field>
+          <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('model').invalid"> enter model name</small>
+          <mat-form-field>
+            <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6">
+          </mat-form-field>
+          <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('unitRate').invalid"> enter unit price</small>
+          <mat-form-field>
+            <input matInput placeholder="quantity" formControlName="qty" (keyup)="calculateGrandTotal()" [maxlength]="3">
+          </mat-form-field>
+          <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('qty').invalid"> enter quantity 3 letters</small>
+          <div class="form-group" *ngIf="grandTotal">
+            <label class="lbl-txt">Grand Total: {{grandTotal}}</label>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary" (click)="onStockDetails()">Save</button>
+            <button class="btn btn-danger" (click)="onReset()">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
