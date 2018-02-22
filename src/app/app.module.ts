@@ -10,14 +10,17 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {ServiceInterceptor} from './service/service.interceptor';
 import {AuthService, Ng2UiAuthModule} from 'ng2-ui-auth';
 import {environment} from '../environments/environment';
-import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule} from '@angular/material';
+import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatProgressSpinnerModule} from '@angular/material';
 import {TechnoService} from './service/techno.service';
+import { SpinnerService } from './service/spinner.service';
+import { SpinnerComponent } from './spinner/spinner.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
+    SpinnerComponent,
     PageNotFoundComponent
   ],
   imports: [
@@ -30,13 +33,14 @@ import {TechnoService} from './service/techno.service';
     BrowserAnimationsModule,
     MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule,
     APP_ROUTES,
+    MatProgressSpinnerModule,
     BrowserModule.withServerTransition({appId: 'serverApp'})
   ],
   providers: [SharedService, {
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true
-  }, AuthService, TechnoService],
+  }, AuthService, TechnoService, SpinnerService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
