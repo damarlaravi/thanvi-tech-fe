@@ -3,9 +3,8 @@ import { SpinnerService } from '../service/spinner.service';
 
 @Component({
     selector: 'app-spinner',
-    template: `<div *ngIf="active">
-    <mat-progress-spinner style="margin:0 auto;" mode="indeterminate"></mat-progress-spinner>
-</div>`
+    templateUrl: './spinner.component.html',
+    styleUrls: ['./spinner.component.scss']
 })
 
 export class SpinnerComponent implements OnInit, OnDestroy {
@@ -21,9 +20,9 @@ export class SpinnerComponent implements OnInit, OnDestroy {
      *  or do it on some other event eg: when xmlhttp request completes 
      * loading data for the component
      * 
-     */ 
+     */
     ngOnInit() {
-        this.spinner.stop(); 
+        this.spinner.stop();
     }
 
     ngOnDestroy() {

@@ -9,7 +9,8 @@ import {
   MatFormFieldModule,
   MatInputModule,
   MatNativeDateModule,
-  MatTabsModule
+  MatTabsModule,
+  MatTableModule
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -22,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    MatTabsModule
+    MatTabsModule,
+    MatTableModule
   ],
   declarations: [StockComponent, ReceivedComponent, SoldComponent],
   exports: [StockComponent]

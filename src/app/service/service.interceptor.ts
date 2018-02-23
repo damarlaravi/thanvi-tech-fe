@@ -24,8 +24,10 @@ export class ServiceInterceptor implements HttpInterceptor {
         });
 
         return next.handle(clonedRequest).do((ev: HttpEvent<any>) => {
-            if (ev instanceof HttpResponse) {
+            setTimeout (() => {
                 this.spinnerService.stop();
+            }, 1000);
+            if (ev instanceof HttpResponse) {
                 console.log('processing response', ev);
             }
             if (ev instanceof HttpErrorResponse) {

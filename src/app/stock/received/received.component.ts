@@ -8,6 +8,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
 import * as _moment from 'moment';
+import { Stock } from '../../model/app.model';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -39,6 +40,7 @@ export class ReceivedComponent implements OnInit {
   public minDate: Date;
   public isFormSubmit: boolean;
   public grandTotal: string;
+  private stockDetails: Array<Stock> = [];
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -69,7 +71,7 @@ export class ReceivedComponent implements OnInit {
   public onStockDetails(): void {
     this.isFormSubmit = true;
     if (this.receivedForm.valid) {
-
+      this.stockDetails.push(this.receivedForm.value);
     }
   }
 
