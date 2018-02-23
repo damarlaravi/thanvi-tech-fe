@@ -18,20 +18,19 @@ export class ServiceInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>,
         next: HttpHandler): Observable<HttpEvent<any>> {
-        this.spinnerService.start();
+        this.spinnerService.display(true);
         const clonedRequest = req.clone({
             headers: req.headers.set('Content-Type', 'application/json')
         });
 
         return next.handle(clonedRequest).do((ev: HttpEvent<any>) => {
             setTimeout (() => {
-                this.spinnerService.stop();
+                this.spinnerService.display(false);
             }, 1000);
             if (ev instanceof HttpResponse) {
                 console.log('processing response', ev);
             }
             if (ev instanceof HttpErrorResponse) {
-                this.spinnerService.stop();
                 console.log('Getting Error from service :: ', ev);
             }
         });

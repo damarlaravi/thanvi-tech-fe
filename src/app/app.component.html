@@ -1,9 +1,11 @@
-<app-spinner>Spinning...</app-spinner>
+<!-- <app-spinner>Spinning...</app-spinner> -->
 
 <app-nav-bar *ngIf="isLoggedIn"></app-nav-bar>
 <div class="container">
   <div class="starter-template">
-    <router-outlet></router-outlet>
+    <router-outlet>
+      <span *ngIf="showLoader" class="loading"></span>
+    </router-outlet>
   </div>
 </div>
 

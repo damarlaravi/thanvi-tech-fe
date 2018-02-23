@@ -1,26 +1,13 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Injectable()
 export class SpinnerService {
-    public status: Subject<boolean> = new Subject();
-    private _active = false;
+    public status: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    constructor() { }
 
-    public get active(): boolean {
-        return this._active;
-    }
-
-    public set active(v: boolean) {
-        this._active = v;
-        this.status.next(v);
-    }
-
-    public start(): void {
-        this.active = true;
-    }
-
-    public stop(): void {
-        this.active = false;
+    display(value: boolean) {
+        this.status.next(value);
     }
 }

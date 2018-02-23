@@ -40,7 +40,7 @@ export class ReceivedComponent implements OnInit {
   public minDate: Date;
   public isFormSubmit: boolean;
   public grandTotal: string;
-  private stockDetails: Array<Stock> = [];
+  public stockDetails: Array<Stock> = [];
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
@@ -71,6 +71,10 @@ export class ReceivedComponent implements OnInit {
   public onStockDetails(): void {
     this.isFormSubmit = true;
     if (this.receivedForm.valid) {
+      const stockInfo: Stock = this.receivedForm.value;
+      stockInfo.id = Math.floor((Math.random() * 100));
+      stockInfo.date = moment(stockInfo.date).format('DD/MM/YYYY');
+      stockInfo.unitRate = parseFloat(this.receivedForm.get('unitRate').value);
       this.stockDetails.push(this.receivedForm.value);
     }
   }
@@ -79,5 +83,13 @@ export class ReceivedComponent implements OnInit {
     this.isFormSubmit = false;
     this.receivedForm.reset();
     this.setDefaultData();
+  }
+
+  public onEdit(s): void {
+
+  }
+
+  public onDelete(id): void {
+
   }
 }
