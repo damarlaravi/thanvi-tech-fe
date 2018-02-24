@@ -30,7 +30,7 @@
             <label class="lbl-txt">Grand Total: {{grandTotal}}</label>
           </div>
           <div class="form-group">
-            <button class="btn btn-primary" (click)="onStockDetails()">Save</button>
+            <button class="btn btn-primary" (click)="onStockDetails()">Add</button>
             <button class="btn btn-danger" (click)="onReset()">Cancel</button>
           </div>
         </div>
@@ -57,11 +57,14 @@
             <td class="price-info">{{stock.qty}}</td>
             <div class="form-group modify-form">
               <button class="btn btn-primary" (click)="onEdit(stock)">Edit</button>
-              <button class="btn btn-danger" (click)="onDelete(stock.id)">Delete</button>
+              <button class="btn btn-danger" (click)="onDelete(stock.model)">Delete</button>
             </div>
           </tr>
         </tbody>
       </table>
+      <div class="form-group btn-form" *ngIf="stockDetails.length > 0">
+        <button class="btn btn-primary" (click)="onSaveStockDetails()">Save</button>
+      </div>
     </div>
   </div>
 </div>

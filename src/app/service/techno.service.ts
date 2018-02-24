@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Stock } from '../model/app.model';
 
 @Injectable()
 export class TechnoService {
@@ -18,5 +19,9 @@ export class TechnoService {
     params = params.append('token', token); */
     // console.log(' Obj is:: ', obj);
     return this.http.post<any>(`${environment.API_URL}/auth/reset`, obj);
+  }
+
+  public saveStock(stocks: Stock[]): Observable<Stock []> {
+    return this.http.post<Stock[]>(`${environment.API_URL}/add/stock`, stocks);
   }
 }

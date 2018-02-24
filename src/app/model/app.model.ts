@@ -1,5 +1,4 @@
 export interface Stock {
-    id: number;
     model: string;
     date: string;
     product: string;

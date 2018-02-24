@@ -14,7 +14,6 @@
 
   .lbl-txt {
     text-align: right;
-    width: 100%;
   }
 
   .received-box {
@@ -38,11 +37,20 @@
   }
 
 .modify-form{
-  padding-left: 15px;
-  padding-top: 15px;
+  padding-left: .75rem;
+  padding-top: .75rem;
 }
 
 .price-info {
   text-align: right;
-  width: 100%;
+}
+
+.table td, .table th {
+  padding: .75rem;
+  vertical-align: middle;
+}
+
+.btn-form {
+  margin-right: 1rem;
+  text-align: right;
 }

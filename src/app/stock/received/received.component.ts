@@ -9,6 +9,8 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 // the `default as` syntax.
 import * as _moment from 'moment';
 import { Stock } from '../../model/app.model';
+import { DateUtil } from '../../util/date.util';
+import { TechnoService } from '../../service/techno.service';
 const moment = _moment;
 
 export const MY_FORMATS = {
@@ -41,7 +43,7 @@ export class ReceivedComponent implements OnInit {
   public isFormSubmit: boolean;
   public grandTotal: string;
   public stockDetails: Array<Stock> = [];
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private techService: TechnoService) { }
 
   ngOnInit() {
     this.minDate = new Date();
@@ -55,9 +57,18 @@ export class ReceivedComponent implements OnInit {
     this.setDefaultData();
   }
 
-  private setDefaultData(): void {
-    this.receivedForm.get('product').setValue('LG Product');
-    this.receivedForm.get('date').setValue(moment(new Date(), 'dd-MM-yyyy'));
+  private setDefaultData(s: Stock = null): void {
+    if (s) {
+      const date = DateUtil.convertStringToDate(s.date);
+      this.receivedForm.get('date').setValue(date);
+      this.receivedForm.get('product').setValue(s.product);
+      this.receivedForm.get('model').setValue(s.model);
+      this.receivedForm.get('qty').setValue(s.quantity);
+      this.receivedForm.get('unitRate').setValue(s.unitRate);
+    } else {
+      this.receivedForm.get('product').setValue('LG Product');
+      this.receivedForm.get('date').setValue(moment(new Date(), 'dd-MM-yyyy'));
+    }
   }
 
   public calculateGrandTotal(): void {
@@ -71,25 +82,56 @@ export class ReceivedComponent implements OnInit {
   public onStockDetails(): void {
     this.isFormSubmit = true;
     if (this.receivedForm.valid) {
-      const stockInfo: Stock = this.receivedForm.value;
-      stockInfo.id = Math.floor((Math.random() * 100));
-      stockInfo.date = moment(stockInfo.date).format('DD/MM/YYYY');
-      stockInfo.unitRate = parseFloat(this.receivedForm.get('unitRate').value);
-      this.stockDetails.push(this.receivedForm.value);
+      if (this.isModelNotSaved()) {
+        const stockInfo: Stock = this.receivedForm.value;
+        stockInfo.date = moment(stockInfo.date).format('DD/MM/YYYY');
+        stockInfo.quantity = this.receivedForm.get('qty').value;
+        stockInfo.unitRate = parseFloat(this.receivedForm.get('unitRate').value);
+        this.stockDetails.push(this.receivedForm.value);
+        this.onReset();
+      } else {
+        alert('Model already added please edit');
+      }
     }
   }
 
+  public onSaveStockDetails(): void {
+    this.techService.saveStock(this.stockDetails).subscribe((res) => {
+      console.log('getting response:::   ', res);
+    }, err => console.log('getting Error is :: ', err));
+  }
+
   public onReset(): void {
-    this.isFormSubmit = false;
     this.receivedForm.reset();
+    this.grandTotal = null;
     this.setDefaultData();
+    this.isFormSubmit = false;
   }
 
-  public onEdit(s): void {
-
+  public onEdit(s: Stock): void {
+    this.setDefaultData(s);
   }
 
-  public onDelete(id): void {
+  public onDelete(model): void {
+    let i = 0;
+    for (const stock of this.stockDetails) {
+      if (stock.model === model) {
+        this.stockDetails.splice(i, 1);
+        return;
+      }
+      i++;
+    }
+  }
 
+  private isModelNotSaved(): boolean {
+    let isExit = true;
+    const model = this.receivedForm.get('model').value;
+    const date = moment(this.receivedForm.get('date').value).format('DD/MM/YYYY');
+    for (const stock of this.stockDetails) {
+      if (stock.model === model && stock.date === date) {
+        isExit = false;
+      }
+    }
+    return isExit;
   }
 }
