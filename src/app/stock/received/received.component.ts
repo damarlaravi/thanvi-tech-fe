@@ -87,6 +87,9 @@ export class ReceivedComponent implements OnInit {
   public onSaveStockDetails(): void {
     this.techService.saveStock(this.stockDetails).subscribe((res) => {
       console.log('getting response:::   ', res);
+      alert('Saved Successfully');
+      this.onReset();
+      this.stockDetails = [];
     }, err => console.log('getting Error is :: ', err));
   }
 

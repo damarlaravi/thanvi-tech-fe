@@ -22,6 +22,6 @@ export class TechnoService {
   }
 
   public saveStock(stocks: Stock[]): Observable<Stock []> {
-    return this.http.post<Stock[]>(`${environment.API_URL}/add/stock`, stocks);
+    return this.http.post<Stock[]>(`${environment.API_URL}/stocks/add`, stocks);
   }
 }
