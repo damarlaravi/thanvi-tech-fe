@@ -11,19 +11,8 @@ import * as _moment from 'moment';
 import { Stock } from '../../model/app.model';
 import { DateUtil } from '../../util/date.util';
 import { TechnoService } from '../../service/techno.service';
+import { MY_FORMATS } from '../../util/date-format';
 const moment = _moment;
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'DD',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-received',
@@ -35,7 +24,7 @@ export const MY_FORMATS = {
     // here, due to limitations of our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ],
+  ]
 })
 export class ReceivedComponent implements OnInit {
   public receivedForm: FormGroup;

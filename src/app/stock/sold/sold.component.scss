@@ -1,0 +1,23 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+  
+.form-container > * {
+    width: 100%;
+}
+
+.sold-container {
+    border: 1px solid black;
+    border-radius: .25rem;
+    float: left;
+}
+
+.stock-header {
+    padding-top: 1rem;
+    padding-bottom: 0;
+}
+
+.align-center {
+    margin: 0 auto;
+}
