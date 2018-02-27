@@ -18,19 +18,16 @@ export class AppComponent implements OnInit, OnDestroy {
   public isCollapsed = false;
   constructor(private sharedService: SharedService, private authService: AuthService,
     private ss: SpinnerService) {
-
-  }
-
-  public ngOnInit(): void {
     this.subscription$ = this.sharedService.getLogged().subscribe(val => {
       this.isLoggedIn = val;
     });
+    this.isLoggedIn = this.authService.isAuthenticated();
+  }
 
+  public ngOnInit(): void {
     this.loaderSubscription$ = this.ss.status.subscribe((val: boolean) => {
       this.showLoader = val;
     });
-
-    this.isLoggedIn = this.authService.isAuthenticated();
   }
 
   toggleMenu() {
