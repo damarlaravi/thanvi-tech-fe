@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -12,6 +12,7 @@ import { Stock } from '../../model/app.model';
 import { DateUtil } from '../../util/date.util';
 import { TechnoService } from '../../service/techno.service';
 import { MY_FORMATS } from '../../util/date-format';
+import { Subscription } from 'rxjs/Subscription';
 const moment = _moment;
 
 @Component({
@@ -26,12 +27,13 @@ const moment = _moment;
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ]
 })
-export class ReceivedComponent implements OnInit {
+export class ReceivedComponent implements OnInit, OnDestroy {
   public receivedForm: FormGroup;
   public minDate: Date;
   public isFormSubmit: boolean;
   public grandTotal: string;
   public stockDetails: Array<Stock> = [];
+  private subscription$: Subscription;
   constructor(private fb: FormBuilder, private techService: TechnoService) { }
 
   ngOnInit() {
@@ -60,6 +62,10 @@ export class ReceivedComponent implements OnInit {
     }
   }
 
+  public ngOnDestroy(): void {
+    this.subscription$.unsubscribe();
+  }
+
   public calculateGrandTotal(): void {
     if (this.receivedForm.get('unitRate').value && this.receivedForm.get('qty').value) {
       const unitRate: number = parseFloat(this.receivedForm.get('unitRate').value);
@@ -85,7 +91,7 @@ export class ReceivedComponent implements OnInit {
   }
 
   public onSaveStockDetails(): void {
-    this.techService.saveStock(this.stockDetails).subscribe((res) => {
+    this.subscription$ = this.techService.saveStock(this.stockDetails).subscribe((res) => {
       console.log('getting response:::   ', res);
       alert('Saved Successfully');
       this.onReset();

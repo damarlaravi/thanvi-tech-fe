@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { TechnoService } from '../../service/techno.service';
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../../util/date-format';
 import { DateUtil } from '../../util/date.util';
+import { Subscription } from 'rxjs/Subscription';
+import { Stock } from '../../model/app.model';
+import * as _moment from 'moment';
+const moment = _moment;
 
 @Component({
   selector: 'app-sold',
@@ -18,12 +22,14 @@ import { DateUtil } from '../../util/date.util';
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ]
 })
-export class SoldComponent implements OnInit {
+export class SoldComponent implements OnInit, OnDestroy {
   public soldForm: FormGroup;
   public minDate: Date;
   public grandTotal: string;
   public isFormSubmit = false;
   public addForm: FormGroup;
+  public stocks: Array<Stock> = [];
+  private subcription$: Subscription;
 
   constructor(private fb: FormBuilder, private ts: TechnoService) { }
 
@@ -40,8 +46,17 @@ export class SoldComponent implements OnInit {
     this.addForm = this.fb.group({
       add1: ['', [Validators.required]]
     });
+
+    this.getStockDetails();
+    this.setDefaultFormData();
   }
 
+
+  ngOnDestroy(): void {
+    console.log(' In Received Component destroy metthod calling');
+    // throw new Error('Method not implemented.');
+    this.subcription$.unsubscribe();
+  }
 
   public onStockDetails(): void {
     this.isFormSubmit = true;
@@ -58,5 +73,32 @@ export class SoldComponent implements OnInit {
       const qty: number = parseFloat(this.soldForm.get('qty').value);
       this.grandTotal = (unitRate * qty).toFixed(2);
     }
+  }
+
+  public onSelectChange(model): void {
+    let selectedStockInfo: Stock;
+    if (model) {
+      for (const stock of this.stocks) {
+        if (stock.model === model.value) {
+          selectedStockInfo = stock;
+        }
+      }
+    }
+
+    if (selectedStockInfo) {
+      this.soldForm.get('unitRate').setValue(selectedStockInfo.unitRate);
+      this.soldForm.get('qty').setValue(selectedStockInfo.quantity);
+    }
+  }
+
+  private setDefaultFormData(): void {
+    this.soldForm.get('date').setValue(moment(new Date(), 'dd-MM-yyyy'));
+    this.soldForm.get('product').setValue('LG Product');
+  }
+
+  private getStockDetails(): void {
+    this.subcription$ = this.ts.getStockDetails().subscribe((resp) => {
+      this.stocks = resp;
+    });
   }
 }

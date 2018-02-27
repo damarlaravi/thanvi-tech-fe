@@ -1,7 +1,7 @@
 <div class="container sold-container">
     <div class="col-sm-12">
         <h4 class="stock-header">Sell Stock</h4>
-        <div class="col-sm-5">
+        <div class="col-sm-4">
             <form [formGroup]="soldForm" class="form-horizantal">
                 <div class="form-container">
                     <mat-form-field>
@@ -15,15 +15,18 @@
                     </mat-form-field>
                     <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('product').invalid"> enter product name</small>
                     <mat-form-field>
-                        <input matInput placeholder="model" formControlName="model">
+                        <mat-select class="form-control" formControlName="model" title="select model" (change)="onSelectChange($event)">
+                            <mat-option disabled>select model</mat-option>
+                            <mat-option *ngFor="let stock of stocks" [value]="stock.model">{{stock.model}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                     <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('model').invalid"> enter model name</small>
                     <mat-form-field>
-                        <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6">
+                        <input matInput placeholder="unit rate" formControlName="unitRate" (change)="calculateGrandTotal()" [maxlength]="6">
                     </mat-form-field>
                     <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('unitRate').invalid"> enter unit price</small>
                     <mat-form-field>
-                        <input matInput placeholder="quantity" formControlName="qty" (keyup)="calculateGrandTotal()" [maxlength]="3">
+                        <input matInput placeholder="quantity" formControlName="qty" (change)="calculateGrandTotal()" [maxlength]="3">
                     </mat-form-field>
                     <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('qty').invalid"> enter quantity 3 letters</small>
                     <div class="form-group" *ngIf="grandTotal">

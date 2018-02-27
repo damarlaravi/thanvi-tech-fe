@@ -10,7 +10,7 @@ import {
   MatInputModule,
   MatNativeDateModule,
   MatTabsModule,
-  MatTableModule
+  MatSelectModule
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -23,8 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    MatTabsModule,
-    MatTableModule
+    MatTabsModule, 
+    MatSelectModule
   ],
   declarations: [StockComponent, ReceivedComponent, SoldComponent],
   exports: [StockComponent]
