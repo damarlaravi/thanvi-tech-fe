@@ -1,18 +1,18 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
 import * as _moment from 'moment';
-import { Stock } from '../../model/app.model';
-import { DateUtil } from '../../util/date.util';
-import { TechnoService } from '../../service/techno.service';
-import { MY_FORMATS } from '../../util/date-format';
-import { Subscription } from 'rxjs/Subscription';
+import {Stock} from '../../model/app.model';
+import {DateUtil} from '../../util/date.util';
+import {TechnoService} from '../../service/techno.service';
+import {MY_FORMATS} from '../../util/date-format';
+import {Subscription} from 'rxjs/Subscription';
+
 const moment = _moment;
 
 @Component({
@@ -23,8 +23,8 @@ const moment = _moment;
     // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
     // `MatMomentDateModule` in your applications root module. We provide it at the component level
     // here, due to limitations of our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS}
   ]
 })
 export class ReceivedComponent implements OnInit, OnDestroy {
@@ -34,7 +34,9 @@ export class ReceivedComponent implements OnInit, OnDestroy {
   public grandTotal: string;
   public stockDetails: Array<Stock> = [];
   private subscription$: Subscription;
-  constructor(private fb: FormBuilder, private techService: TechnoService) { }
+
+  constructor(private fb: FormBuilder, private techService: TechnoService) {
+  }
 
   ngOnInit() {
     this.minDate = new Date();

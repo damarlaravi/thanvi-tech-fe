@@ -1,14 +1,14 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TechnoService } from '../../service/techno.service';
-import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from '@angular/material';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
-import { MY_FORMATS } from '../../util/date-format';
-import { DateUtil } from '../../util/date.util';
-import { Subscription } from 'rxjs/Subscription';
-import { Stock } from '../../model/app.model';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {TechnoService} from '../../service/techno.service';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {MY_FORMATS} from '../../util/date-format';
+import {DateUtil} from '../../util/date.util';
+import {Subscription} from 'rxjs/Subscription';
+import {Stock} from '../../model/app.model';
 import * as _moment from 'moment';
-import { quantityValidator } from '../validator/custom.validator';
+
 const moment = _moment;
 
 @Component({
@@ -30,7 +30,7 @@ export class SoldComponent implements OnInit, OnDestroy {
   public isFormSubmit = false;
   public addForm: FormGroup;
   public stocks: Array<Stock> = [];
-  private subcription$: Subscription;
+  private subscription$: Subscription;
   public qtyMisMatchError: string;
 
   constructor(private fb: FormBuilder, private ts: TechnoService) { }
@@ -57,7 +57,7 @@ export class SoldComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     console.log(' In Received Component destroy metthod calling');
     // throw new Error('Method not implemented.');
-    this.subcription$.unsubscribe();
+    this.subscription$.unsubscribe();
   }
 
   public onStockDetails(): void {
@@ -66,7 +66,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     if (this.soldForm.valid && this.qtyMisMatchError === '') {
 
     } else {
-      
+
     }
   }
 
@@ -119,7 +119,7 @@ export class SoldComponent implements OnInit, OnDestroy {
   }
 
   private getStockDetails(): void {
-    this.subcription$ = this.ts.getStockDetails().subscribe((resp) => {
+    this.subscription$ = this.ts.getStockDetails().subscribe((resp) => {
       this.stocks = resp;
     });
   }
