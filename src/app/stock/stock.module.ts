@@ -13,6 +13,7 @@ import {
   MatSelectModule
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NumberOnlyDirective } from '../directive/numberOnly.directive';
 
 @NgModule({
   imports: [
@@ -26,7 +27,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatTabsModule, 
     MatSelectModule
   ],
-  declarations: [StockComponent, ReceivedComponent, SoldComponent],
+  declarations: [StockComponent, ReceivedComponent, SoldComponent, NumberOnlyDirective],
   exports: [StockComponent]
 })
 export class StockModule {

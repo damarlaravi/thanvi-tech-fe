@@ -13,6 +13,7 @@ import {environment} from '../environments/environment';
 import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatProgressSpinnerModule} from '@angular/material';
 import {TechnoService} from './service/techno.service';
 import { SpinnerService } from './service/spinner.service';
+import { NumberOnlyDirective } from './directive/numberOnly.directive';
 
 
 @NgModule({

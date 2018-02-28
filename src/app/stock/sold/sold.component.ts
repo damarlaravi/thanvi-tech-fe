@@ -8,6 +8,7 @@ import { DateUtil } from '../../util/date.util';
 import { Subscription } from 'rxjs/Subscription';
 import { Stock } from '../../model/app.model';
 import * as _moment from 'moment';
+import { quantityValidator } from '../validator/custom.validator';
 const moment = _moment;
 
 @Component({
@@ -30,6 +31,7 @@ export class SoldComponent implements OnInit, OnDestroy {
   public addForm: FormGroup;
   public stocks: Array<Stock> = [];
   private subcription$: Subscription;
+  public qtyMisMatchError: string;
 
   constructor(private fb: FormBuilder, private ts: TechnoService) { }
 
@@ -39,7 +41,7 @@ export class SoldComponent implements OnInit, OnDestroy {
       date: ['', [Validators.required]],
       product: ['', [Validators.required]],
       model: ['', [Validators.required]],
-      unitRate: ['', [Validators.required]],
+      unitRate: [{ value: '', disabled: true }, [Validators.required]],
       qty: ['', [Validators.required]]
     });
 
@@ -60,6 +62,12 @@ export class SoldComponent implements OnInit, OnDestroy {
 
   public onStockDetails(): void {
     this.isFormSubmit = true;
+    this.qtyMisMatchError = '';
+    if (this.soldForm.valid && this.qtyMisMatchError === '') {
+
+    } else {
+      
+    }
   }
 
   public onReset(): void {
@@ -78,16 +86,30 @@ export class SoldComponent implements OnInit, OnDestroy {
   public onSelectChange(model): void {
     let selectedStockInfo: Stock;
     if (model) {
-      for (const stock of this.stocks) {
-        if (stock.model === model.value) {
-          selectedStockInfo = stock;
-        }
-      }
+      selectedStockInfo = this.getSelectedModelInfo(model.value);
     }
 
     if (selectedStockInfo) {
       this.soldForm.get('unitRate').setValue(selectedStockInfo.unitRate);
       this.soldForm.get('qty').setValue(selectedStockInfo.quantity);
+    }
+  }
+
+  public validateQty(): void {
+    const quantity = this.soldForm.get('qty').value;
+    const model = this.soldForm.get('model').value;
+    if (quantity <= this.getSelectedModelInfo(model).quantity) {
+      this.qtyMisMatchError = '';
+    } else {
+      this.qtyMisMatchError = `Enter ${this.soldForm.get('qty').value} but available ${this.getSelectedModelInfo(model).quantity}`;
+    }
+  }
+
+  private getSelectedModelInfo(model): Stock {
+    for (const stock of this.stocks) {
+      if (stock.model === model) {
+        return stock;
+      }
     }
   }
 

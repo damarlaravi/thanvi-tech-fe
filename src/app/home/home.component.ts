@@ -12,7 +12,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.loggedUser = this.auth.getPayload();
-    console.log(' this.logged user is :: ', this.loggedUser);
+    // console.log(' this.logged user is :: ', this.loggedUser);
   }
-
 }

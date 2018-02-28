@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
 import { SharedService } from './service/shared.service';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from 'ng2-ui-auth';
@@ -9,7 +9,7 @@ import { SpinnerService } from './service/spinner.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   public showLoader: boolean;
   private subscription$: Subscription;
@@ -17,14 +17,15 @@ export class AppComponent implements OnInit, OnDestroy {
   public isLoggedIn = false;
   public isCollapsed = false;
   constructor(private sharedService: SharedService, private authService: AuthService,
-    private ss: SpinnerService) {
-    this.subscription$ = this.sharedService.getLogged().subscribe(val => {
-      this.isLoggedIn = val;
-    });
-    this.isLoggedIn = this.authService.isAuthenticated();
+    private ss: SpinnerService, private cdRef: ChangeDetectorRef) {
+
   }
 
   public ngOnInit(): void {
+    this.subscription$ = this.sharedService.getLogged().subscribe(val => {
+      this.isLoggedIn = val;
+    });
+
     this.loaderSubscription$ = this.ss.status.subscribe((val: boolean) => {
       this.showLoader = val;
     });
@@ -39,5 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
     if (this.loaderSubscription$) {
       this.loaderSubscription$.unsubscribe();
     }
+  }
+
+  public ngAfterViewChecked(): void {
+    this.isLoggedIn = this.authService.isAuthenticated();
+    this.cdRef.detectChanges();
   }
 }
