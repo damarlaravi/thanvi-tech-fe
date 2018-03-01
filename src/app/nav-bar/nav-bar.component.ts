@@ -1,8 +1,8 @@
-import {Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild} from '@angular/core';
-import {SharedService} from '../service/shared.service';
-import {Subscription} from 'rxjs/Subscription';
-import {Router} from '@angular/router';
-import {MatMenuTrigger} from '@angular/material';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
+import { Router } from '@angular/router';
+import { MatMenuTrigger } from '@angular/material';
+import { SpinnerService } from '../service/spinner.service';
 
 @Component({
   selector: 'app-nav-bar',
@@ -12,19 +12,19 @@ import {MatMenuTrigger} from '@angular/material';
 export class NavBarComponent implements OnInit, OnDestroy {
   public titleText = 'Sample Material App'; // Thanvi Techno Solution
   public navList = [
-    {routePath: 'home', description: 'Home'},
-    {routePath: 'stock', description: 'Stock'}
+    { routePath: 'home', description: 'Home' },
+    { routePath: 'stock', description: 'Stock' }
   ];
 
   public userList = [
-    {routePath: 'sign-up', description: 'Signup'},
-    {routePath: 'profile', description: 'Profile'},
-    {routePath: 'auth/logout', description: 'Logout'},
+    { routePath: 'sign-up', description: 'Signup' },
+    { routePath: 'profile', description: 'Profile' },
+    { routePath: 'auth/logout', description: 'Logout' },
   ];
   public isLoggedIn = false;
   private subscription: Subscription;
 
-  constructor(private ss: SharedService, private router: Router) {
+  constructor(private ss: SpinnerService, private router: Router) {
 
   }
 

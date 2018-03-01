@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {SharedService} from '../../service/shared.service';
 import {Router} from '@angular/router';
 import {AuthService} from 'ng2-ui-auth';
 import {FormHelperService} from '../../service/form-helper.service';
+import { SpinnerService } from '../../service/spinner.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,7 +13,7 @@ import {FormHelperService} from '../../service/form-helper.service';
 export class LoginComponent implements OnInit {
   public form: FormGroup;
 
-  constructor(private fb: FormBuilder, private ss: SharedService, private auth: AuthService,
+  constructor(private fb: FormBuilder, private ss: SpinnerService, private auth: AuthService,
               private router: Router,
               public fh: FormHelperService) {
   }
@@ -22,12 +22,6 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-    this.auth.logout().subscribe({
-      complete: () => {
-        console.log('Logged out');
-        this.ss.setLogged(false);
-      }
     });
   }
 

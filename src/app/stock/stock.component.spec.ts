@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StockComponent } from './stock.component';
+import { NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { AuthService, Ng2UiAuthModule } from 'ng2-ui-auth';
 
 describe('StockComponent', () => {
   let component: StockComponent;
@@ -8,7 +10,10 @@ describe('StockComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StockComponent ]
+      declarations: [ StockComponent ],
+      imports: [Ng2UiAuthModule.forRoot({})],
+      providers: [AuthService],
+      schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
     })
     .compileComponents();
   }));

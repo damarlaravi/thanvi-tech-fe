@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ResetComponent } from './reset.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TechnoService } from '../../service/techno.service';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('ResetPasswordComponent', () => {
   let component: ResetComponent;
@@ -8,9 +12,11 @@ describe('ResetPasswordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ResetComponent ]
+      declarations: [ResetComponent],
+      imports: [ReactiveFormsModule, RouterTestingModule.withRoutes([]), HttpClientTestingModule],
+      providers: [TechnoService]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,17 +1,16 @@
-import {BrowserModule} from '@angular/platform-browser';
-import {NgModule} from '@angular/core';
-import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {APP_ROUTES} from './app.routes';
-import {NavBarComponent} from './nav-bar/nav-bar.component';
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-import {SharedService} from './service/shared.service';
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {ServiceInterceptor} from './service/service.interceptor';
-import {AuthService, Ng2UiAuthModule} from 'ng2-ui-auth';
-import {environment} from '../environments/environment';
-import {MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatProgressSpinnerModule} from '@angular/material';
-import {TechnoService} from './service/techno.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { AppComponent } from './app.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { APP_ROUTES } from './app.routes';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { ServiceInterceptor } from './service/service.interceptor';
+import { AuthService, Ng2UiAuthModule } from 'ng2-ui-auth';
+import { environment } from '../environments/environment';
+import { MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule } from '@angular/material';
+import { TechnoService } from './service/techno.service';
 import { SpinnerService } from './service/spinner.service';
 import { NumberOnlyDirective } from './directive/numberOnly.directive';
 
@@ -32,10 +31,9 @@ import { NumberOnlyDirective } from './directive/numberOnly.directive';
     BrowserAnimationsModule,
     MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule,
     APP_ROUTES,
-    MatProgressSpinnerModule,
-    BrowserModule.withServerTransition({appId: 'serverApp'})
+    BrowserModule.withServerTransition({ appId: 'serverApp' })
   ],
-  providers: [SharedService, {
+  providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: ServiceInterceptor,
     multi: true

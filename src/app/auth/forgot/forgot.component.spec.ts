@@ -1,6 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ForgotComponent } from './forgot.component';
+import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule } from '@angular/forms';
+import { TechnoService } from '../../service/techno.service';
 
 describe('ForgotPasswordComponent', () => {
   let component: ForgotComponent;
@@ -8,7 +11,9 @@ describe('ForgotPasswordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ForgotComponent ]
+      declarations: [ ForgotComponent ],
+      imports: [HttpClientModule, ReactiveFormsModule],
+      providers: [TechnoService]
     })
     .compileComponents();
   }));

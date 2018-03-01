@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AuthService} from 'ng2-ui-auth';
 import {Router} from '@angular/router';
-import {SharedService} from '../../service/shared.service';
+import { SpinnerService } from '../../service/spinner.service';
 
 @Component({
   selector: 'app-sign-out',
@@ -9,7 +9,7 @@ import {SharedService} from '../../service/shared.service';
   styleUrls: ['./logout.component.scss']
 })
 export class LogoutComponent implements OnInit {
-  constructor(private authService: AuthService, private router: Router, private ss: SharedService) {
+  constructor(private authService: AuthService, private router: Router, private ss: SpinnerService) {
   }
 
   ngOnInit() {

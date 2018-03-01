@@ -14,14 +14,7 @@ const moment = _moment;
 @Component({
   selector: 'app-sold',
   templateUrl: './sold.component.html',
-  styleUrls: ['./sold.component.scss'],
-  providers: [
-    // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
-    // `MatMomentDateModule` in your applications root module. We provide it at the component level
-    // here, due to limitations of our example generation script.
-    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
-  ]
+  styleUrls: ['./sold.component.scss']
 })
 export class SoldComponent implements OnInit, OnDestroy {
   public soldForm: FormGroup;
@@ -86,13 +79,15 @@ export class SoldComponent implements OnInit, OnDestroy {
   public onSelectChange(model): void {
     let selectedStockInfo: Stock;
     if (model) {
-      selectedStockInfo = this.getSelectedModelInfo(model.value);
+      selectedStockInfo = this.getSelectedModelInfo(model);
     }
 
     if (selectedStockInfo) {
       this.soldForm.get('unitRate').setValue(selectedStockInfo.unitRate);
       this.soldForm.get('qty').setValue(selectedStockInfo.quantity);
     }
+
+    this.calculateGrandTotal();
   }
 
   public validateQty(): void {

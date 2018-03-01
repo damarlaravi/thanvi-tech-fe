@@ -27,5 +27,21 @@
 }
 
 .btn-position {
+    padding-top: 10px;
+    margin: 0;
+}
+
+.mat-input-element:disabled {
+    color: black
+}
+
+.lbl-txt {
+    text-align: right;
+    width: 100%;
     padding-top: 20px;
+    padding-bottom: 0;
+}
+
+.lbl-feild {
+    margin: 0;
 }

@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
-import { SharedService } from './service/shared.service';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from 'ng2-ui-auth';
 import { SpinnerService } from './service/spinner.service';
@@ -16,13 +15,13 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked {
   private loaderSubscription$: Subscription;
   public isLoggedIn = false;
   public isCollapsed = false;
-  constructor(private sharedService: SharedService, private authService: AuthService,
+  constructor(private authService: AuthService,
     private ss: SpinnerService, private cdRef: ChangeDetectorRef) {
 
   }
 
   public ngOnInit(): void {
-    this.subscription$ = this.sharedService.getLogged().subscribe(val => {
+    this.subscription$ = this.ss.getLogged().subscribe(val => {
       this.isLoggedIn = val;
     });
 
