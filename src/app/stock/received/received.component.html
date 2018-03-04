@@ -19,11 +19,11 @@
           </mat-form-field>
           <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('model').invalid"> enter model name</small>
           <mat-form-field>
-            <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6">
+            <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6" appNumberOnly>
           </mat-form-field>
           <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('unitRate').invalid"> enter unit price</small>
           <mat-form-field>
-            <input matInput placeholder="quantity" formControlName="qty" (keyup)="calculateGrandTotal()" [maxlength]="3">
+            <input matInput placeholder="quantity" formControlName="qty" (keyup)="calculateGrandTotal()" [maxlength]="3" appNumberOnly>
           </mat-form-field>
           <small class="text text-danger text-possition" *ngIf="isFormSubmit && receivedForm.get('qty').invalid"> enter quantity 3 letters</small>
           <div class="form-group" *ngIf="grandTotal">

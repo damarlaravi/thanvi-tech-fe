@@ -1,12 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {TechnoService} from '../../service/techno.service';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {MY_FORMATS} from '../../util/date-format';
-import {DateUtil} from '../../util/date.util';
-import {Subscription} from 'rxjs/Subscription';
-import {Stock} from '../../model/app.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TechnoService } from '../../service/techno.service';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { MY_FORMATS } from '../../util/date-format';
+import { DateUtil } from '../../util/date.util';
+import { Subscription } from 'rxjs/Subscription';
+import { Stock, State, SellInfo } from '../../model/app.model';
 import * as _moment from 'moment';
 
 const moment = _moment;
@@ -20,11 +20,14 @@ export class SoldComponent implements OnInit, OnDestroy {
   public soldForm: FormGroup;
   public minDate: Date;
   public grandTotal: string;
-  public isFormSubmit = false;
+  public isAddForm = false;
   public addForm: FormGroup;
   public stocks: Array<Stock> = [];
   private subscription$: Subscription;
   public qtyMisMatchError: string;
+  public addedOutStockDetails: Array<Stock> = [];
+  public isSaveSubmit = false;
+  public statesList: Array<State> = [];
 
   constructor(private fb: FormBuilder, private ts: TechnoService) { }
 
@@ -39,11 +42,17 @@ export class SoldComponent implements OnInit, OnDestroy {
     });
 
     this.addForm = this.fb.group({
-      add1: ['', [Validators.required]]
+      name: ['', [Validators.required]],
+      address1: ['', [Validators.required]],
+      address2: [''],
+      landMark: ['', [Validators.required]],
+      state: ['', [Validators.required]],
+      pincode: ['', [Validators.required]]
     });
 
     this.getStockDetails();
     this.setDefaultFormData();
+    this.getStatesList();
   }
 
 
@@ -54,18 +63,18 @@ export class SoldComponent implements OnInit, OnDestroy {
   }
 
   public onStockDetails(): void {
-    this.isFormSubmit = true;
+    this.isAddForm = true;
     this.qtyMisMatchError = '';
     if (this.soldForm.valid && this.qtyMisMatchError === '') {
-
+      this.addedOutStockDetails.push(this.soldForm.value);
     } else {
-
+      console.log('Form is invalid');
     }
   }
 
   public onReset(): void {
     this.soldForm.reset();
-    this.isFormSubmit = false;
+    this.isAddForm = false;
   }
 
   public calculateGrandTotal(): void {
@@ -86,7 +95,7 @@ export class SoldComponent implements OnInit, OnDestroy {
       this.soldForm.get('unitRate').setValue(selectedStockInfo.unitRate);
       this.soldForm.get('qty').setValue(selectedStockInfo.quantity);
     }
-
+    this.soldForm.get('unitRate').enable({});
     this.calculateGrandTotal();
   }
 
@@ -95,9 +104,27 @@ export class SoldComponent implements OnInit, OnDestroy {
     const model = this.soldForm.get('model').value;
     if (quantity <= this.getSelectedModelInfo(model).quantity) {
       this.qtyMisMatchError = '';
+      this.calculateGrandTotal();
     } else {
+      this.grandTotal = '';
       this.qtyMisMatchError = `Enter ${this.soldForm.get('qty').value} but available ${this.getSelectedModelInfo(model).quantity}`;
     }
+  }
+
+  public onSave(): void {
+    this.isSaveSubmit = true;
+    if (this.addedOutStockDetails.length > 0 && this.addForm.valid) {
+      const sellInfo = {} as SellInfo;
+      sellInfo.stocks = this.addedOutStockDetails;
+      sellInfo.address = this.addForm.value;
+      this.subscription$ = this.ts.saveSells(sellInfo).subscribe((resp) => {
+        console.log('getting success info ', resp);
+      });
+    }
+  }
+
+  public onResetSell(): void {
+    this.addForm.reset();
   }
 
   private getSelectedModelInfo(model): Stock {
@@ -116,6 +143,12 @@ export class SoldComponent implements OnInit, OnDestroy {
   private getStockDetails(): void {
     this.subscription$ = this.ts.getStockDetails().subscribe((resp) => {
       this.stocks = resp;
+    });
+  }
+
+  private getStatesList(): void {
+    this.subscription$ = this.ts.getStateList().subscribe((states) => {
+      this.statesList = states;
     });
   }
 }

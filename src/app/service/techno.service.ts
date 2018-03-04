@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Stock, SellInfo } from '../model/app.model';
+import { Stock, SellInfo, State } from '../model/app.model';
 import { cacheable } from '../util/cache.util';
 
 @Injectable()
@@ -38,4 +38,7 @@ export class TechnoService {
     return this.http.post<SellInfo>(`${environment.API_URL}/sells/add`, sell);
   }
 
+  public getStateList(): Observable<State[]> {
+    return this.http.get<State[]>(`${environment.STATE_LIST}`);
+  }
 }

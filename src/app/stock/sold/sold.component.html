@@ -1,54 +1,126 @@
-<div class="container sold-container" ngPreserveWhitespaces>
-    <div class="col-sm-12">
-        <h4 class="stock-header">Sell Stock</h4>
-        <div class="col-sm-4">
-            <form [formGroup]="soldForm" class="form-horizantal">
-                <div class="form-container">
-                    <mat-form-field>
-                        <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('date').invalid"> enter stock date</small>
-                    <mat-form-field>
-                        <input matInput placeholder="product" formControlName="product">
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('product').invalid"> enter product name</small>
-                    <mat-form-field>
-                        <mat-select class="form-control" formControlName="model" title="select model" (change)="onSelectChange($event.value)">
-                            <mat-option disabled>select model</mat-option>
-                            <mat-option *ngFor="let stock of stocks" [value]="stock.model">{{stock.model}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('model').invalid"> enter model name</small>
-                    <mat-form-field>
-                        <input matInput placeholder="unit rate" formControlName="unitRate" [maxlength]="6" appNumberOnly>
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('unitRate').invalid"> enter unit price</small>
-                    <mat-form-field>
-                        <input matInput placeholder="quantity" formControlName="qty" (keyup)="validateQty()" [maxlength]="3" appNumberOnly>
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && soldForm.get('qty').invalid"> enter quantity 3 letters</small>
-                    <small class="text text-danger text-possition" *ngIf="qtyMisMatchError !== ''"> {{qtyMisMatchError}}</small>
-                    <div class="form-group lbl-feild" *ngIf="grandTotal">
-                        <label class="lbl-txt">Grand Total: {{grandTotal}}</label>
-                    </div>
-                    <div class="form-group btn-position">
-                        <button class="btn btn-primary" (click)="onStockDetails()">Add</button>
-                        <button class="btn btn-danger" (click)="onReset()">Cancel</button>
-                    </div>
+<div class="container custom" ngPreserveWhitespaces>
+    <div class="sold-container">
+        <div class="border-info">
+            <h4 class="stock-header">Sell Stock</h4>
+            <div class="col-sm-12">
+                <div class="col-sm-4">
+                    <form [formGroup]="soldForm" class="form-horizantal">
+                        <div class="form-container">
+                            <mat-form-field>
+                                <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('date').invalid"> enter stock date</small>
+                            <mat-form-field>
+                                <input matInput placeholder="product" formControlName="product">
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('product').invalid"> enter product name</small>
+                            <mat-form-field>
+                                <mat-select class="form-control" formControlName="model" title="select model" (change)="onSelectChange($event.value)">
+                                    <mat-option disabled>select model</mat-option>
+                                    <mat-option *ngFor="let stock of stocks" [value]="stock.model">{{stock.model}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('model').invalid"> enter model name</small>
+                            <mat-form-field>
+                                <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6" appNumberOnly>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('unitRate').invalid"> enter unit price</small>
+                            <mat-form-field>
+                                <input matInput placeholder="quantity" formControlName="qty" (keyup)="validateQty()" [maxlength]="3" appNumberOnly>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('qty').invalid"> enter quantity 3 letters</small>
+                            <small class="text text-danger text-possition" *ngIf="qtyMisMatchError !== ''"> {{qtyMisMatchError}}</small>
+                            <div class="form-group lbl-feild" *ngIf="grandTotal">
+                                <label class="lbl-txt">Grand Total: {{grandTotal}}</label>
+                            </div>
+                            <div class="form-group btn-position">
+                                <button class="btn btn-primary" (click)="onStockDetails()">Add</button>
+                                <button class="btn btn-danger" (click)="onReset()">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
-        </div>
-        <div class="col-sm-5">
-            <form [formGroup]="addForm" class="form-horizantal">
-                <div class="form-container">
-                    <mat-form-field>
-                        <input matInput placeholder="address1" formControlName="add1">
-                    </mat-form-field>
-                    <small class="text text-danger text-possition" *ngIf="isFormSubmit && addForm.get('add1').invalid"> enter address 1</small>
+                <div class="col-sm-12 form-info">
+                    <table class="table table-bordered" *ngIf="addedOutStockDetails.length > 0">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Product Name</th>
+                                <th>Model</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Modify/Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let stock of addedOutStockDetails">
+                                <td>{{stock.date | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{stock.product}}</td>
+                                <td>{{stock.model}}</td>
+                                <td class="price-info">{{stock.unitRate.toFixed(2)}}</td>
+                                <td class="price-info">{{stock.qty}}</td>
+                                <div class="form-group modify-form">
+                                    <button class="btn btn-primary" (click)="onEdit(stock)">Edit</button>
+                                    <button class="btn btn-danger" (click)="onDelete(stock.model)">Delete</button>
+                                </div>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-            </form>
+            </div>
+            <div class="col-sm-12 form-margin">
+                <form [formGroup]="addForm" class="address-form">
+                    <div class="col-sm-6 add-form-data">
+                        <div class="form-container">
+                            <mat-form-field>
+                                <input matInput placeholder="executive name" formControlName="name">
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('name').invalid"> enter executive name</small>
+                        </div>
+                        <div class="form-container">
+                            <mat-form-field class="state-form">
+                                <input matInput placeholder="address1" formControlName="address1">
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('address1').invalid"> enter address 1</small>
+                        </div>
+                        <div class="form-container">
+                            <mat-form-field>
+                                <input matInput placeholder="address2" formControlName="address2">
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('address2').invalid"> enter address 2</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 add-form-data">
+                        <div class="form-container">
+                            <mat-form-field>
+                                <input matInput placeholder="land mark" formControlName="landMark">
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('landMark').invalid"> enter near land mark</small>
+                        </div>
+                        <div class="form-container">
+                            <mat-form-field>
+                                <mat-select class="form-control" formControlName="state" title="select state">
+                                    <mat-option disabled>select state</mat-option>
+                                    <mat-option *ngFor="let state of statesList" [value]="state.name">{{state.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('state').invalid"> select state</small>
+                        </div>
+                        <div class="form-container">
+                            <mat-form-field>
+                                <input matInput placeholder="pincode" formControlName="pincode" [maxlength]="6" appNumberOnly>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('pincode').invalid"> enter pincode</small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="form-group modify-form">
+                <button class="btn btn-primary" (click)="onSave()">Save</button>
+                <button class="btn btn-danger" (click)="onResetSell()">Reset</button>
+            </div>
         </div>
     </div>
 </div>

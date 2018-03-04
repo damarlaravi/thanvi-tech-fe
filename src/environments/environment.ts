@@ -8,6 +8,7 @@ const { version: appVersion } = require('../../package.json');*/
 
 export const environment = {
   API_URL: 'http://localhost:8080/api/v1',
+  STATE_LIST: 'http://localhost:4200/assets/states.json',
   APP_VERSION: 'v1/',
   production: false,
   // version: appVersion

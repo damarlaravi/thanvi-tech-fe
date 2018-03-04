@@ -10,13 +10,19 @@ export interface Stock {
 
 export interface SellInfo {
     address: Address;
-    stock: Stock;
+    stocks: Array<Stock>;
 }
 
 export interface Address {
+    name: string;
     address1: string;
     address2: string;
     landmark: string;
     pincode: number;
     state: string;
+}
+
+export interface State {
+    code: string;
+    name: string;
 }

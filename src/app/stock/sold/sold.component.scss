@@ -8,14 +8,19 @@
 }
 
 .sold-container {
-    border: 1px solid black;
-    border-radius: .25rem;
     float: left;
+    width: 100%;
+}
+
+.custom {
+    padding: 0;
+    width: 100%;
 }
 
 .stock-header {
     padding-top: 1rem;
     padding-bottom: 0;
+    padding-left: 1rem;
 }
 
 .align-center {
@@ -27,7 +32,7 @@
 }
 
 .btn-position {
-    padding-top: 10px;
+    padding: 10px 0;
     margin: 0;
 }
 
@@ -44,4 +49,56 @@
 
 .lbl-feild {
     margin: 0;
+}
+
+.form-info {
+    margin: 0;
+    float: left;
+}
+
+.border-info {
+    border: 1px solid black !important;
+    border-radius: .25rem;
+    margin: 0;
+    padding: 0;
+}
+
+.form-margin {
+    margin: 0 15px;
+    display: inline-flex;
+    width: 90%;
+}
+
+.price-info {
+    text-align: right;
+}
+
+.table td, .table th {
+    padding: .5rem;
+    vertical-align: middle;
+}
+
+
+.modify-form {
+    padding-left: 30rem;
+    padding-top: .5rem;
+}
+
+.address-form {
+    width: 75%;
+    float: left;
+}
+
+.main-form {
+    margin: 0 auto;
+    width: 100%;
+}
+
+.add-form-data {
+    float: left;
+}
+
+.state-form {
+    margin-top: 1.2rem;
+    padding: 0;
 }
