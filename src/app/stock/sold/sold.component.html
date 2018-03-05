@@ -5,6 +5,11 @@
             <div class="col-sm-12">
                 <div class="col-sm-4">
                     <form [formGroup]="soldForm" class="form-horizantal">
+                        <div class="form-container" style="display: none">
+                            <mat-form-field>
+                                <input matInput placeholder="Id" formControlName="id">
+                            </mat-form-field>
+                        </div>
                         <div class="form-container">
                             <mat-form-field>
                                 <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">
@@ -12,29 +17,41 @@
                                 <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('date').invalid"> enter stock date</small>
+                        </div>
+                        <div class="form-container">
                             <mat-form-field>
                                 <input matInput placeholder="product" formControlName="product">
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('product').invalid"> enter product name</small>
+                        </div>
+                        <div class="form-container">
                             <mat-form-field>
                                 <mat-select class="form-control" formControlName="model" title="select model" (change)="onSelectChange($event.value)">
                                     <mat-option disabled>select model</mat-option>
-                                    <mat-option *ngFor="let stock of stocks" [value]="stock.model">{{stock.model}}</mat-option>
+                                    <mat-option *ngFor="let stock of stocks" [value]="stock">{{stock.model}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('model').invalid"> enter model name</small>
+                        </div>
+                        <div class="form-container">
                             <mat-form-field>
                                 <input matInput placeholder="unit rate" formControlName="unitRate" (keyup)="calculateGrandTotal()" [maxlength]="6" appNumberOnly>
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('unitRate').invalid"> enter unit price</small>
+                        </div>
+                        <div class="form-container">
                             <mat-form-field>
                                 <input matInput placeholder="quantity" formControlName="qty" (keyup)="validateQty()" [maxlength]="3" appNumberOnly>
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isAddForm && soldForm.get('qty').invalid"> enter quantity 3 letters</small>
                             <small class="text text-danger text-possition" *ngIf="qtyMisMatchError !== ''"> {{qtyMisMatchError}}</small>
+                        </div>
+                        <div class="form-container">
                             <div class="form-group lbl-feild" *ngIf="grandTotal">
                                 <label class="lbl-txt">Grand Total: {{grandTotal}}</label>
                             </div>
+                        </div>
+                        <div class="form-container">
                             <div class="form-group btn-position">
                                 <button class="btn btn-primary" (click)="onStockDetails()">Add</button>
                                 <button class="btn btn-danger" (click)="onReset()">Cancel</button>
@@ -90,6 +107,15 @@
                                 <input matInput placeholder="address2" formControlName="address2">
                             </mat-form-field>
                             <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('address2').invalid"> enter address 2</small>
+                        </div>
+                        <div class="form-container">
+                            <mat-form-field>
+                                <mat-select class="form-control" formControlName="addressType" title="select address type">
+                                    <mat-option disabled>select address type</mat-option>
+                                    <mat-option *ngFor="let type of addressTypes" [value]="type">{{type}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <small class="text text-danger text-possition" *ngIf="isSaveSubmit && addForm.get('addressType').invalid"> select address type</small>
                         </div>
                     </div>
                     <div class="col-sm-6 add-form-data">

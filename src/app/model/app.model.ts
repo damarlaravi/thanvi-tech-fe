@@ -1,4 +1,5 @@
 export interface Stock {
+    id: string;
     model: string;
     date: string;
     product: string;
@@ -20,9 +21,16 @@ export interface Address {
     landmark: string;
     pincode: number;
     state: string;
+    addressType: string;
 }
 
 export interface State {
     code: string;
     name: string;
+}
+
+export enum AddressTypes {
+    HomeType = 'Home',
+    ShowroomType= 'Show Room',
+    OfficeType = 'Office'
 }

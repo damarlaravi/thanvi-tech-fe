@@ -6,7 +6,7 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../../util/date-format';
 import { DateUtil } from '../../util/date.util';
 import { Subscription } from 'rxjs/Subscription';
-import { Stock, State, SellInfo } from '../../model/app.model';
+import { Stock, State, SellInfo, AddressTypes } from '../../model/app.model';
 import * as _moment from 'moment';
 
 const moment = _moment;
@@ -28,12 +28,14 @@ export class SoldComponent implements OnInit, OnDestroy {
   public addedOutStockDetails: Array<Stock> = [];
   public isSaveSubmit = false;
   public statesList: Array<State> = [];
+  public addressTypes = [AddressTypes.HomeType, AddressTypes.OfficeType, AddressTypes.ShowroomType];
 
   constructor(private fb: FormBuilder, private ts: TechnoService) { }
 
   ngOnInit() {
     this.minDate = DateUtil.getMinDate();
     this.soldForm = this.fb.group({
+      id: [{ value: '', disabled: true }],
       date: ['', [Validators.required]],
       product: ['', [Validators.required]],
       model: ['', [Validators.required]],
@@ -47,7 +49,8 @@ export class SoldComponent implements OnInit, OnDestroy {
       address2: [''],
       landMark: ['', [Validators.required]],
       state: ['', [Validators.required]],
-      pincode: ['', [Validators.required]]
+      pincode: ['', [Validators.required]],
+      addressType: ['', [Validators.required]]
     });
 
     this.getStockDetails();
@@ -66,9 +69,29 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.isAddForm = true;
     this.qtyMisMatchError = '';
     if (this.soldForm.valid && this.qtyMisMatchError === '') {
-      this.addedOutStockDetails.push(this.soldForm.value);
+      const stockInfo: Stock = this.soldForm.value;
+      const stockModel = this.soldForm.get('model').value;
+      stockInfo.model = stockModel.model;
+      stockInfo.quantity = this.soldForm.get('qty').value;
+      stockInfo.id = stockModel.id;
+      this.addedOutStockDetails.push(stockInfo);
+      console.log('Seleted stock info is ::: ', stockInfo);
     } else {
       console.log('Form is invalid');
+    }
+  }
+
+  public onEdit(s: Stock): void {
+    this.setDefaultFormData(s);
+  }
+
+  public onDelete(model: string) {
+    let i = 0;
+    for (const stock of this.addedOutStockDetails) {
+      if (stock.model === model) {
+        return this.addedOutStockDetails.splice(i, 1);
+      }
+      i++;
     }
   }
 
@@ -85,15 +108,12 @@ export class SoldComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectChange(model): void {
-    let selectedStockInfo: Stock;
-    if (model) {
-      selectedStockInfo = this.getSelectedModelInfo(model);
-    }
-
-    if (selectedStockInfo) {
-      this.soldForm.get('unitRate').setValue(selectedStockInfo.unitRate);
-      this.soldForm.get('qty').setValue(selectedStockInfo.quantity);
+  public onSelectChange(stock: Stock): void {
+    // console.log('Stock Info getting ::  ', stock);
+    if (stock) {
+      this.soldForm.get('id').setValue(stock.id);
+      this.soldForm.get('unitRate').setValue(stock.unitRate);
+      this.soldForm.get('qty').setValue(stock.quantity);
     }
     this.soldForm.get('unitRate').enable({});
     this.calculateGrandTotal();
@@ -101,13 +121,14 @@ export class SoldComponent implements OnInit, OnDestroy {
 
   public validateQty(): void {
     const quantity = this.soldForm.get('qty').value;
-    const model = this.soldForm.get('model').value;
-    if (quantity <= this.getSelectedModelInfo(model).quantity) {
+    const stockInfo = this.soldForm.get('model').value;
+    // console.log('Model in validateQty :::  ', model);
+    if (quantity <= this.getSelectedModelInfo(stockInfo.model).quantity) {
       this.qtyMisMatchError = '';
       this.calculateGrandTotal();
     } else {
       this.grandTotal = '';
-      this.qtyMisMatchError = `Enter ${this.soldForm.get('qty').value} but available ${this.getSelectedModelInfo(model).quantity}`;
+      this.qtyMisMatchError = `Enter ${this.soldForm.get('qty').value} but available ${stockInfo.quantity}`;
     }
   }
 
@@ -128,6 +149,7 @@ export class SoldComponent implements OnInit, OnDestroy {
   }
 
   private getSelectedModelInfo(model): Stock {
+    console.log('Model is ::  ', model);
     for (const stock of this.stocks) {
       if (stock.model === model) {
         return stock;
@@ -135,9 +157,19 @@ export class SoldComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setDefaultFormData(): void {
-    this.soldForm.get('date').setValue(moment(new Date(), 'dd-MM-yyyy'));
-    this.soldForm.get('product').setValue('LG Product');
+  private setDefaultFormData(s: Stock = null): void {
+    if (s) {
+      const date = DateUtil.convertStringToDate(s.date);
+      this.soldForm.get('date').setValue(date);
+      this.soldForm.get('product').setValue(s.product);
+      this.soldForm.get('model').setValue(s.model);
+      this.soldForm.get('qty').setValue(s.quantity);
+      this.soldForm.get('unitRate').setValue(s.unitRate);
+    } else {
+      this.soldForm.get('date').setValue(moment(new Date(), 'dd-MM-yyyy'));
+      this.soldForm.get('product').setValue('LG Product');
+    }
+
   }
 
   private getStockDetails(): void {
