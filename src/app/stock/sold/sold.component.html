@@ -5,11 +5,6 @@
             <div class="col-sm-12">
                 <div class="col-sm-4">
                     <form [formGroup]="soldForm" class="form-horizantal">
-                        <div class="form-container" style="display: none">
-                            <mat-form-field>
-                                <input matInput placeholder="Id" formControlName="id">
-                            </mat-form-field>
-                        </div>
                         <div class="form-container">
                             <mat-form-field>
                                 <input matInput [min]="minDate" [matDatepicker]="picker" placeholder="Choose a date" formControlName="date">

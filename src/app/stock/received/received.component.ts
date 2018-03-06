@@ -1,17 +1,18 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 // Depending on whether rollup is used, moment needs to be imported differently.
 // Since Moment.js doesn't have a default export, we normally need to import using the `* as`
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
 import * as _moment from 'moment';
-import {Stock} from '../../model/app.model';
-import {DateUtil} from '../../util/date.util';
-import {TechnoService} from '../../service/techno.service';
-import {MY_FORMATS} from '../../util/date-format';
-import {Subscription} from 'rxjs/Subscription';
+import { StockIn } from '../../model/app.model';
+import { DateUtil } from '../../util/date.util';
+import { TechnoService } from '../../service/techno.service';
+import { MY_FORMATS } from '../../util/date-format';
+import { Subscription } from 'rxjs/Subscription';
+import { StockService } from '../stock.service';
 
 const moment = _moment;
 
@@ -25,10 +26,10 @@ export class ReceivedComponent implements OnInit, OnDestroy {
   public minDate: Date;
   public isFormSubmit: boolean;
   public grandTotal: string;
-  public stockDetails: Array<Stock> = [];
+  public stockDetails: Array<StockIn> = [];
   private subscription$: Subscription;
 
-  constructor(private fb: FormBuilder, private techService: TechnoService) {
+  constructor(private fb: FormBuilder, private techService: TechnoService, private sService: StockService) {
   }
 
   ngOnInit() {
@@ -43,7 +44,7 @@ export class ReceivedComponent implements OnInit, OnDestroy {
     this.setDefaultData();
   }
 
-  private setDefaultData(s: Stock = null): void {
+  private setDefaultData(s: StockIn = null): void {
     if (s) {
       const date = DateUtil.convertStringToDate(s.date);
       this.receivedForm.get('date').setValue(date);
@@ -58,7 +59,9 @@ export class ReceivedComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription$.unsubscribe();
+    if (this.subscription$) {
+      this.subscription$.unsubscribe();
+    }
   }
 
   public calculateGrandTotal(): void {
@@ -73,7 +76,7 @@ export class ReceivedComponent implements OnInit, OnDestroy {
     this.isFormSubmit = true;
     if (this.receivedForm.valid) {
       if (this.isModelNotSaved()) {
-        const stockInfo: Stock = this.receivedForm.value;
+        const stockInfo: StockIn = this.receivedForm.value;
         stockInfo.date = moment(stockInfo.date).format('DD/MM/YYYY');
         stockInfo.quantity = this.receivedForm.get('qty').value;
         stockInfo.unitRate = parseFloat(this.receivedForm.get('unitRate').value);
@@ -87,8 +90,8 @@ export class ReceivedComponent implements OnInit, OnDestroy {
 
   public onSaveStockDetails(): void {
     this.subscription$ = this.techService.saveStock(this.stockDetails).subscribe((res) => {
-      console.log('getting response:::   ', res);
       alert('Saved Successfully');
+      this.sService.getStocksList(res);
       this.onReset();
       this.stockDetails = [];
     }, err => console.log('getting Error is :: ', err));
@@ -101,7 +104,7 @@ export class ReceivedComponent implements OnInit, OnDestroy {
     this.isFormSubmit = false;
   }
 
-  public onEdit(s: Stock): void {
+  public onEdit(s: StockIn): void {
     this.setDefaultData(s);
   }
 

@@ -1,10 +1,21 @@
 export interface Stock {
-    id: string;
-    model: string;
     date: string;
+    model: string;
     product: string;
+}
+
+export interface StockIn extends Stock {
     quantity: number;
     unitRate: number;
+    stockLeft: number;
+    total: number;
+}
+
+export interface StockOut extends Stock {
+    stockInId: string;
+    sellPrice: number;
+    sellQuantity: number;
+    stockAvailable: number;
     total: number;
 }
 
@@ -31,6 +42,6 @@ export interface State {
 
 export enum AddressTypes {
     HomeType = 'Home',
-    ShowroomType= 'Show Room',
+    ShowroomType = 'Show Room',
     OfficeType = 'Office'
 }

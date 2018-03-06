@@ -6,8 +6,9 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../../util/date-format';
 import { DateUtil } from '../../util/date.util';
 import { Subscription } from 'rxjs/Subscription';
-import { Stock, State, SellInfo, AddressTypes } from '../../model/app.model';
+import { State, SellInfo, AddressTypes, StockIn, StockOut } from '../../model/app.model';
 import * as _moment from 'moment';
+import { StockService } from '../stock.service';
 
 const moment = _moment;
 
@@ -22,15 +23,16 @@ export class SoldComponent implements OnInit, OnDestroy {
   public grandTotal: string;
   public isAddForm = false;
   public addForm: FormGroup;
-  public stocks: Array<Stock> = [];
+  public stocks: Array<StockIn> = [];
   private subscription$: Subscription;
+  private stockSubscription$: Subscription;
   public qtyMisMatchError: string;
-  public addedOutStockDetails: Array<Stock> = [];
+  public addedOutStockDetails: Array<StockOut> = [];
   public isSaveSubmit = false;
   public statesList: Array<State> = [];
   public addressTypes = [AddressTypes.HomeType, AddressTypes.OfficeType, AddressTypes.ShowroomType];
 
-  constructor(private fb: FormBuilder, private ts: TechnoService) { }
+  constructor(private fb: FormBuilder, private ts: TechnoService, private stockService: StockService) { }
 
   ngOnInit() {
     this.minDate = DateUtil.getMinDate();
@@ -56,6 +58,10 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.getStockDetails();
     this.setDefaultFormData();
     this.getStatesList();
+
+    this.stockSubscription$ = this.stockService.stockInList.subscribe((stocksList) => {
+      this.stocks = stocksList;
+    });
   }
 
 
@@ -63,25 +69,30 @@ export class SoldComponent implements OnInit, OnDestroy {
     console.log(' In Received Component destroy metthod calling');
     // throw new Error('Method not implemented.');
     this.subscription$.unsubscribe();
+    if (this.stockSubscription$) {
+      this.stockSubscription$.unsubscribe();
+    }
   }
 
   public onStockDetails(): void {
     this.isAddForm = true;
     this.qtyMisMatchError = '';
     if (this.soldForm.valid && this.qtyMisMatchError === '') {
-      const stockInfo: Stock = this.soldForm.value;
+      const stockInfo: StockOut = this.soldForm.value;
       const stockModel = this.soldForm.get('model').value;
       stockInfo.model = stockModel.model;
-      stockInfo.quantity = this.soldForm.get('qty').value;
-      stockInfo.id = stockModel.id;
+      stockInfo.sellQuantity = this.soldForm.get('qty').value;
+      stockInfo.sellPrice = this.soldForm.get('unitRate').value;
+      stockInfo.stockInId = stockModel.id;
       this.addedOutStockDetails.push(stockInfo);
-      console.log('Seleted stock info is ::: ', stockInfo);
+      this.onReset();
+      // console.log('Seleted stock info is ::: ', stockInfo);
     } else {
       console.log('Form is invalid');
     }
   }
 
-  public onEdit(s: Stock): void {
+  public onEdit(s: StockIn): void {
     this.setDefaultFormData(s);
   }
 
@@ -97,6 +108,7 @@ export class SoldComponent implements OnInit, OnDestroy {
 
   public onReset(): void {
     this.soldForm.reset();
+    this.setDefaultFormData();
     this.isAddForm = false;
   }
 
@@ -108,10 +120,9 @@ export class SoldComponent implements OnInit, OnDestroy {
     }
   }
 
-  public onSelectChange(stock: Stock): void {
+  public onSelectChange(stock: StockIn): void {
     // console.log('Stock Info getting ::  ', stock);
     if (stock) {
-      this.soldForm.get('id').setValue(stock.id);
       this.soldForm.get('unitRate').setValue(stock.unitRate);
       this.soldForm.get('qty').setValue(stock.quantity);
     }
@@ -148,8 +159,8 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.addForm.reset();
   }
 
-  private getSelectedModelInfo(model): Stock {
-    console.log('Model is ::  ', model);
+  private getSelectedModelInfo(model): StockIn {
+    // console.log('Model is ::  ', model);
     for (const stock of this.stocks) {
       if (stock.model === model) {
         return stock;
@@ -157,7 +168,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setDefaultFormData(s: Stock = null): void {
+  private setDefaultFormData(s: StockIn = null): void {
     if (s) {
       const date = DateUtil.convertStringToDate(s.date);
       this.soldForm.get('date').setValue(date);

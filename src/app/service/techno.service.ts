@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Stock, SellInfo, State } from '../model/app.model';
+import { SellInfo, State, StockIn } from '../model/app.model';
 import { cacheable } from '../util/cache.util';
 
 @Injectable()
@@ -22,16 +22,16 @@ export class TechnoService {
     return this.http.post<any>(`${environment.API_URL}/auth/reset`, obj);
   }
 
-  public saveStock(stocks: Stock[]): Observable<Stock[]> {
-    return this.http.post<Stock[]>(`${environment.API_URL}/stocks/add`, stocks);
+  public saveStock(stocks: StockIn[]): Observable<StockIn[]> {
+    return this.http.post<StockIn[]>(`${environment.API_URL}/stocks/add`, stocks);
   }
 
-  public getStockDetails(): Observable<Stock[]> {
+  public getStockDetails(): Observable<StockIn[]> {
     // return this.http.get<Stock[]>(`${environment.API_URL}/stocks/get`);
     if (this._cache) {
       return this._cache;
     }
-    return this._cache = cacheable<any>(this.http.get<Stock[]>(`${environment.API_URL}/stocks/get`));
+    return this._cache = cacheable<any>(this.http.get<StockIn[]>(`${environment.API_URL}/stocks/get`));
   }
 
   public saveSells(sell: SellInfo): Observable<SellInfo> {

@@ -19,6 +19,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NumberOnlyDirective } from '../directive/numberOnly.directive';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MY_FORMATS } from '../util/date-format';
+import { StockService } from './stock.service';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { MY_FORMATS } from '../util/date-format';
     // `MatMomentDateModule` in your applications root module. We provide it at the component level
     // here, due to limitations of our example generation script.
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    StockService
   ],
   declarations: [StockComponent, ReceivedComponent, SoldComponent, NumberOnlyDirective],
   exports: [StockComponent]
