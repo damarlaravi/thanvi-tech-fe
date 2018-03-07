@@ -8,6 +8,7 @@ import { cacheable } from '../util/cache.util';
 @Injectable()
 export class TechnoService {
   private _cache: Observable<any>;
+  private _stateCache: Observable<State[]>;
   constructor(private http: HttpClient) {
   }
 
@@ -35,10 +36,14 @@ export class TechnoService {
   }
 
   public saveSells(sell: SellInfo): Observable<SellInfo> {
+    this._cache = null;
     return this.http.post<SellInfo>(`${environment.API_URL}/sells/add`, sell);
   }
 
   public getStateList(): Observable<State[]> {
-    return this.http.get<State[]>(`${environment.STATE_LIST}`);
+    if (this._stateCache) {
+      return this._stateCache;
+    }
+    return this._stateCache = cacheable<any>(this.http.get<State[]>(`${environment.STATE_LIST}`));
   }
 }

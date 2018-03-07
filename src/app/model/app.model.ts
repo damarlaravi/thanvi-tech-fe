@@ -22,7 +22,7 @@ export interface StockOut extends Stock {
 
 export interface SellInfo {
     address: Address;
-    stocks: Array<Stock>;
+    stockOuts: Array<Stock>;
 }
 
 export interface Address {

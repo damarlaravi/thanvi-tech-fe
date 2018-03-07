@@ -24,13 +24,12 @@ export class SoldComponent implements OnInit, OnDestroy {
   public isAddForm = false;
   public addForm: FormGroup;
   public stocks: Array<StockIn> = [];
-  private subscription$: Subscription;
-  private stockSubscription$: Subscription;
   public qtyMisMatchError: string;
   public addedOutStockDetails: Array<StockOut> = [];
   public isSaveSubmit = false;
   public statesList: Array<State> = [];
   public addressTypes = [AddressTypes.HomeType, AddressTypes.OfficeType, AddressTypes.ShowroomType];
+  private subscription$: Subscription;
 
   constructor(private fb: FormBuilder, private ts: TechnoService, private stockService: StockService) { }
 
@@ -59,7 +58,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.setDefaultFormData();
     this.getStatesList();
 
-    this.stockSubscription$ = this.stockService.stockInList.subscribe((stocksList) => {
+    this.subscription$ = this.stockService.stockInList.subscribe((stocksList) => {
       this.stocks = stocksList;
     });
   }
@@ -69,9 +68,6 @@ export class SoldComponent implements OnInit, OnDestroy {
     console.log(' In Received Component destroy metthod calling');
     // throw new Error('Method not implemented.');
     this.subscription$.unsubscribe();
-    if (this.stockSubscription$) {
-      this.stockSubscription$.unsubscribe();
-    }
   }
 
   public onStockDetails(): void {
@@ -110,6 +106,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.soldForm.reset();
     this.setDefaultFormData();
     this.isAddForm = false;
+    this.isSaveSubmit = false;
   }
 
   public calculateGrandTotal(): void {
@@ -124,7 +121,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     // console.log('Stock Info getting ::  ', stock);
     if (stock) {
       this.soldForm.get('unitRate').setValue(stock.unitRate);
-      this.soldForm.get('qty').setValue(stock.quantity);
+      this.soldForm.get('qty').setValue(stock.stockLeft);
     }
     this.soldForm.get('unitRate').enable({});
     this.calculateGrandTotal();
@@ -134,7 +131,7 @@ export class SoldComponent implements OnInit, OnDestroy {
     const quantity = this.soldForm.get('qty').value;
     const stockInfo = this.soldForm.get('model').value;
     // console.log('Model in validateQty :::  ', model);
-    if (quantity <= this.getSelectedModelInfo(stockInfo.model).quantity) {
+    if (quantity <= this.getSelectedModelInfo(stockInfo.model).stockLeft) {
       this.qtyMisMatchError = '';
       this.calculateGrandTotal();
     } else {
@@ -147,16 +144,24 @@ export class SoldComponent implements OnInit, OnDestroy {
     this.isSaveSubmit = true;
     if (this.addedOutStockDetails.length > 0 && this.addForm.valid) {
       const sellInfo = {} as SellInfo;
-      sellInfo.stocks = this.addedOutStockDetails;
+      sellInfo.stockOuts = this.addedOutStockDetails;
       sellInfo.address = this.addForm.value;
       this.subscription$ = this.ts.saveSells(sellInfo).subscribe((resp) => {
-        console.log('getting success info ', resp);
-      });
+        this.onResetSell();
+      }, err => console.log('sell info getting Error ', err),
+        () => {
+          this.subscription$ = this.ts.getStockDetails().subscribe((resp) => {
+            this.stocks = resp;
+          });
+        });
     }
   }
 
   public onResetSell(): void {
     this.addForm.reset();
+    this.addedOutStockDetails = [];
+    this.isAddForm = false;
+    this.isSaveSubmit = false;
   }
 
   private getSelectedModelInfo(model): StockIn {
