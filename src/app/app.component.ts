@@ -2,6 +2,7 @@ import { AfterViewInit, Component, OnChanges, OnDestroy, OnInit, AfterViewChecke
 import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from 'ng2-ui-auth';
 import { SpinnerService } from './service/spinner.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,9 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked {
   private loaderSubscription$: Subscription;
   public isLoggedIn = false;
   public isCollapsed = false;
+  private isInHomeScreen = false;
   constructor(private authService: AuthService,
-    private ss: SpinnerService, private cdRef: ChangeDetectorRef) {
+    private ss: SpinnerService, private cdRef: ChangeDetectorRef, private router: Router) {
 
   }
 
@@ -24,7 +26,6 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked {
     this.subscription$ = this.ss.getLogged().subscribe(val => {
       this.isLoggedIn = val;
     });
-
     this.loaderSubscription$ = this.ss.status.subscribe((val: boolean) => {
       this.showLoader = val;
     });
@@ -43,6 +44,11 @@ export class AppComponent implements OnInit, OnDestroy, AfterViewChecked {
 
   public ngAfterViewChecked(): void {
     this.isLoggedIn = this.authService.isAuthenticated();
+    if (!this.isInHomeScreen && this.isLoggedIn) {
+      console.log(this.router.url);  
+      this.router.navigate(['/home']);
+      this.isInHomeScreen = true;
+    } 
     this.cdRef.detectChanges();
   }
 }
