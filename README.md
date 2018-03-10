@@ -2,8 +2,8 @@
 
 ### docker compose
 `Build docker image`
-$ docker build -t training .
+$ docker build -t thanvi-tech-fe .
 
 `Run the container`
-$ docker run -d -p 4200:80 training
+$ docker run -d -p 4200:80 thanvi-tech-fe
 
