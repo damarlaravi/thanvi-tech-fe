@@ -9,17 +9,20 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ServiceInterceptor } from './service/service.interceptor';
 import { AuthService, Ng2UiAuthModule } from 'ng2-ui-auth';
 import { environment } from '../environments/environment';
-import { MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule } from '@angular/material';
+import { MatButtonModule, MatIconModule, MatMenuModule, MatToolbarModule, MatDialogModule } from '@angular/material';
 import { TechnoService } from './service/techno.service';
 import { SpinnerService } from './service/spinner.service';
 import { NumberOnlyDirective } from './directive/numberOnly.directive';
+import { DailogComponent, DialogOvervieweComponent } from './dailog/dailog.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     NavBarComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    DailogComponent,
+    DialogOvervieweComponent
   ],
   imports: [
     Ng2UiAuthModule.forRoot({
@@ -29,7 +32,11 @@ import { NumberOnlyDirective } from './directive/numberOnly.directive';
       signupUrl: '/auth/signup'
     }),
     BrowserAnimationsModule,
-    MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
     APP_ROUTES,
     BrowserModule.withServerTransition({ appId: 'serverApp' })
   ],

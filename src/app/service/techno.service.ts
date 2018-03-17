@@ -46,4 +46,8 @@ export class TechnoService {
     }
     return this._stateCache = cacheable<any>(this.http.get<State[]>(`${environment.STATE_LIST}`));
   }
+
+  public checkTokenValid(header): Observable<any> {
+    return this.http.post<any>(`${environment.API_URL}/auth/verifyToken`, header);
+  }
 }
