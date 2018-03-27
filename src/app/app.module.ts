@@ -14,7 +14,7 @@ import { TechnoService } from './service/techno.service';
 import { SpinnerService } from './service/spinner.service';
 import { NumberOnlyDirective } from './directive/numberOnly.directive';
 import { DailogComponent, DialogOvervieweComponent } from './dailog/dailog.component';
-
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import { DailogComponent, DialogOvervieweComponent } from './dailog/dailog.compo
     MatIconModule,
     MatMenuModule,
     APP_ROUTES,
+    FlexLayoutModule,
     BrowserModule.withServerTransition({ appId: 'serverApp' })
   ],
   providers: [{
